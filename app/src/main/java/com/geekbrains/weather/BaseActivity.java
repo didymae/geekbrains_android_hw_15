@@ -39,13 +39,6 @@ public class BaseActivity extends AppCompatActivity
     }
 
     private void initLayout() {
-        final WeatherFragment weatherFrag = new WeatherFragment();
-        final CreateActionFragment editTextFrag = new CreateActionFragment();
-//        publisher.subscribe(weatherFrag);
-        //   publisher.subscribe(editTextFrag);
-
-
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -79,23 +72,16 @@ public class BaseActivity extends AppCompatActivity
             }
         }
 
-        if (country == null)
-        {        addMainFragment(WeatherFragment.newInstance(DEFAULT_COUNTRY));}
-        else replaceMainFragment(WeatherFragment.newInstance(country));
+        if (getResources().getConfiguration().orientation != ORIENTATION_LANDSCAPE) {
+            if (country == null) {
+                addMainFragment(WeatherFragment.newInstance(DEFAULT_COUNTRY));}
+
+            else {
+                replaceMainFragment(WeatherFragment.newInstance(country));
+            }
+        }
     }
 
-    //
-    //  private void addFragment(Fragment fragment,R.id id) {
-    //    getSupportFragmentManager()
-    //          .beginTransaction()
-    //        .replace(R.id.fl_cont, fragment)
-    //      .commit();
-    //  }
-
-//    private void getCurrentFragment() {
-//        getSupportFragmentManager().findFragmentById(R.id.fl_cont);
-//
-//    }
 
     @Override
     public void onBackPressed() {
