@@ -38,7 +38,6 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
             country = getArguments().getString(ARG_COUNTRY);
 
         }
-        setRetainInstance(true);
     }
 
     @Override

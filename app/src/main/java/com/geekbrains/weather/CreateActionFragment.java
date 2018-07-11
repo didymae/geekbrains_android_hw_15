@@ -37,7 +37,9 @@ public class CreateActionFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
         return inflater.inflate(R.layout.create_action_fragment, container, false);
+
     }
 
     @Override
@@ -65,6 +67,7 @@ public class CreateActionFragment extends BaseFragment {
         edittextName = (EditText) view.findViewById(R.id.etname) ;
         intent= getActivity().getIntent();
         Button save = (Button)view.findViewById(R.id.save);
+        Button history = (Button)view.findViewById(R.id.t_history);
 
         edittext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -91,6 +94,15 @@ public class CreateActionFragment extends BaseFragment {
                 textViewName.setText(name);
                 getBaseActivity().replaceMainFragment(WeatherFragment.newInstance(country));
 
+
+            }
+        });
+
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                getBaseActivity().replaceMainFragment(new TemperatureFragment());
 
             }
         });

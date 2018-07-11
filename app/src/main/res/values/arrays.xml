@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="temp_history">
+    <item>-15</item>
+    <item>-10</item>
+    <item>-3</item>
+    <item>-2</item>
+        <item>-4</item>
+        <item>-25</item>
+        <item>-5</item>
+        <item>+1</item>
+    </string-array>
+    <string-array name="days">
+        <item>Среда, 23 июля</item>
+        <item>Вторник, 22 июля</item>
+        <item>Понедельник, 21 июля</item>
+        <item>Воскресенье, 20 июля</item>
+        <item>Суббота, 19 июля</item>
+        <item>Пятница, 18 июля</item>
+        <item>Четверг, 17 июля</item>
+        <item>Среда, 16 июля</item>
+    </string-array>
+</resources>

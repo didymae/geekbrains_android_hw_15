@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize">
+    <LinearLayout
+        android:id="@+id/list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/layout_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/recycler_view"
+        >
+        <EditText
+            android:id="@+id/add_text_d"
+            android:layout_width="0px"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/default_padding"
+            android:inputType="text"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/default_padding"
+            android:layout_marginTop="@dimen/default_padding"
+            android:hint="day" />
+        <EditText
+            android:id="@+id/add_text_t"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/default_padding"
+            android:inputType="text"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/default_padding"
+            android:layout_marginTop="@dimen/default_padding"
+            android:hint="temp" />
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_centerHorizontal="true"
+            android:layout_height="match_parent"
+            android:text="Add" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

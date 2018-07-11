@@ -45,9 +45,7 @@ public class BaseActivity extends AppCompatActivity
         //   publisher.subscribe(editTextFrag);
 
 
-        Button save = (Button)findViewById(R.id.save);
 
-// Обработка нашей кнопки "Save"
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

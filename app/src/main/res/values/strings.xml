@@ -22,4 +22,5 @@
     <string name="wind">Wind</string>
     <string name="visibility">Visibility</string>
     <string name="precipitation">Precipitation</string>
+    <string name="temperature">temperature</string>
 </resources>
