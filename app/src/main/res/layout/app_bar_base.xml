@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.geekbrains.weather.BaseActivity">
+    tools:context="com.geekbrains.weather.BaseActivity"
+    android:background="@color/purpleLight">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -19,13 +20,5 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <FrameLayout
-        android:id="@+id/content_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/purpleLight"/>
-
-    <include layout="@layout/bottom_container" />
 
 </android.support.design.widget.CoordinatorLayout>

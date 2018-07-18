@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class WeatherFragment extends BaseFragment implements /*Observer,*/ CreateActionFragment.OnHeadlineSelectedListener {
 
 
@@ -119,8 +121,9 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
 //    }
 
     @Override
-    public void onArticleSelected(String position) {
+    public void onArticleSelected(ArrayList<String> citiesList) {
         textView.setVisibility(View.VISIBLE);
-        textView.setText(position);
+        String cities = citiesList.toString();
+        textView.setText(cities.substring(cities.indexOf("[") + 1, cities.indexOf("]")));
     }
 }

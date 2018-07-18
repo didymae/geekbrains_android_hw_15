@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,21 +19,29 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by shkryaba on 24/06/2018.
  */
 
 public class CreateActionFragment extends BaseFragment {
 
-    private EditText edittext;
-    private EditText edittextName;
+    private EditText editTextCountry;
+    private EditText editTextName;
     OnHeadlineSelectedListener mCallback;
     Intent intent;
     String country;
     TextView textViewName;
+    private RecyclerView recyclerView;
+    private ArrayList<String> cityList;
+    private TextInputLayout textInputLayout;
+
+
+
 
     public interface OnHeadlineSelectedListener {
-        public void onArticleSelected(String position);
+        void onArticleSelected(ArrayList<String> position);
     }
 
 
@@ -63,50 +74,68 @@ public class CreateActionFragment extends BaseFragment {
 
     @Override
     protected void initLayout(View view, Bundle savedInstanceState) {
-        edittext = (EditText) view.findViewById(R.id.et);
-        edittextName = (EditText) view.findViewById(R.id.etname) ;
-        intent= getActivity().getIntent();
-        Button save = (Button)view.findViewById(R.id.save);
-        Button history = (Button)view.findViewById(R.id.t_history);
+        initCountryList();
 
-        edittext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        textInputLayout = view.findViewById(R.id.text_input);
+
+        recyclerView = view.findViewById(R.id.list_view);
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        CityAdapter cityAdapter = new CityAdapter(getContext(), cityList, mCallback);
+        recyclerView.setAdapter(cityAdapter);
+
+        //инициализация edittext и листенер на ключи при взаимодействии с ним, когда мы нашимаем enter у нас опускается клавиатура и запускается WeatherFragment
+        editTextCountry = (EditText) view.findViewById(R.id.et_country);
+        editTextName = (EditText) view.findViewById(R.id.etname);
+        intent = getActivity().getIntent();
+        Button saveButton = (Button) view.findViewById(R.id.save);
+        Button historyButton = (Button) view.findViewById(R.id.t_history);
+
+        editTextCountry.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    country = edittext.getText().toString().trim();
-                    intent.putExtra("country",country);
-                    mCallback.onArticleSelected(edittext.getText().toString().trim());
-//                    getBaseActivity().startActionFragment(edittext.getText().toString().trim());
+                    country = editTextCountry.getText().toString();
+                    if (country.matches("(^[a-zA-Z]+)")) {
+                        hideError();
+                        InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    } else
+                        showError();
+                      InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                      imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     return true;
                 }
                 return false;
             }
         });
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = edittextName.getText().toString().trim();
-                intent.putExtra("name",name);
-                textViewName = (TextView) getBaseActivity().findViewById(R.id.tvUsername);
-                textViewName.setText(name);
-                getBaseActivity().replaceMainFragment(WeatherFragment.newInstance(country));
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String name = editTextName.getText().toString().trim();
+                            intent.putExtra("name", name);
+                            textViewName = (TextView) getBaseActivity().findViewById(R.id.tvUsername);
+                            textViewName.setText(name);
+                            getBaseActivity().replaceMainFragment(WeatherFragment.newInstance(country));
 
 
-            }
-        });
+                        }
+                    });
 
-        history.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        historyButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            getBaseActivity().replaceMainFragment(new TemperatureFragment());
 
-                getBaseActivity().replaceMainFragment(new TemperatureFragment());
-
-            }
-        });
-    }
+                        }
+                    });
+                }
 
 
 
@@ -138,6 +167,20 @@ public class CreateActionFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         Toast.makeText(getContext(), "onDestroyAction", Toast.LENGTH_SHORT).show();
+    }
+    private void showError() {
+        textInputLayout.setError("Error!!");
+    }
+
+    private void hideError() {
+        textInputLayout.setError("");
+    }
+
+    private void initCountryList() {
+        cityList = new ArrayList<>();
+        cityList.add("Moscow");
+        cityList.add("St. Peterburg");
+        cityList.add("Kazan");
     }
 
 }
