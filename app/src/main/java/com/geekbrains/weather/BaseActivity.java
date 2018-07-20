@@ -186,7 +186,8 @@ public class BaseActivity extends AppCompatActivity
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    //handle the inflated menu's buttons here
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.closeDrawer(GravityCompat.START);
                     return true;
                 }
             });
