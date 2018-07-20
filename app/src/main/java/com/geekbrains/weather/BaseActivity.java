@@ -12,11 +12,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import es.dmoral.toasty.Toasty;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
@@ -26,9 +31,13 @@ public class BaseActivity extends AppCompatActivity
     private TextView textView;
     private static final String TEXT = "TEXT";
     private static final String DEFAULT_COUNTRY = "Moscow";
+    private static final String NAV= "NAV";
     boolean isExistAction;  // Можно ли расположить рядом фрагмент
+    boolean isDrawerClose;
     String country;
     String name;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,7 @@ public class BaseActivity extends AppCompatActivity
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
 
         fab = findViewById(R.id.fab);
 
@@ -93,44 +103,9 @@ public class BaseActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.base, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_settings) {
-            // Handle the camera action
-        } else if (id == R.id.nav_info) {
-            // Handle the camera action
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
     @Override
     public Boolean inNetworkAvailable() {
@@ -186,4 +161,44 @@ public class BaseActivity extends AppCompatActivity
         } else return getSupportFragmentManager().findFragmentById(R.id.main_frame);
 
     }
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+// Handle navigation view item clicks here.
+        int id = item.getItemId();
+        if(id == R.id.nav_settings) {
+            Toasty.success(BaseActivity.this, "Settings menu!!").show();
+            Log.d(NAV, "nav_settings!!");
+            isDrawerClose=true;
+
+        }
+        else if (id == R.id.nav_info){
+                Toasty.success(this, "About menu!!").show();
+                Log.d(NAV, "About!!");
+                isDrawerClose=true;
+
+        }
+        else if (id == R.id.sub_report){
+                Log.d(NAV, "Submit Error!!");
+               PopupMenu popupMenu = new PopupMenu(this ,findViewById(R.id.nav_view));
+               popupMenu.inflate(R.menu.popup);
+               isDrawerClose=false;
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    //handle the inflated menu's buttons here
+                    return true;
+                }
+            });
+                popupMenu.show();
+            }
+        Log.d(NAV, "Close !!");
+
+        if(isDrawerClose){
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);}
+        return true;
+    }
+
+
 }

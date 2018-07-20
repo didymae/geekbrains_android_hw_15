@@ -10,6 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -20,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 /**
  * Created by shkryaba on 24/06/2018.
@@ -74,6 +79,7 @@ public class CreateActionFragment extends BaseFragment {
 
     @Override
     protected void initLayout(View view, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         initCountryList();
 
         textInputLayout = view.findViewById(R.id.text_input);
@@ -137,7 +143,23 @@ public class CreateActionFragment extends BaseFragment {
                     });
                 }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.create_action_menu, menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_add:
+                Toasty.success(getContext(), "Success menu!!").show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onStart() {

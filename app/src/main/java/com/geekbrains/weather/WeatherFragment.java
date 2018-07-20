@@ -6,6 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,6 +22,10 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
     private static final String ARG_COUNTRY = "ARG_COUNTRY";
     private String country;
     private TextView textView;
+    private boolean isCheckedNotification = false;
+    private boolean isCheckedUpdates = false;
+
+
 
     public WeatherFragment() {
     }
@@ -62,6 +69,7 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
 
     @Override
     protected void initLayout(View view, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         textView = view.findViewById(R.id.tv_country);
         if (textView != null) {
             Log.d(ARG_COUNTRY, "NOTnull!!");
@@ -126,4 +134,58 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         String cities = citiesList.toString();
         textView.setText(cities.substring(cities.indexOf("[") + 1, cities.indexOf("]")));
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.base, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_add:
+                return true;
+            case R.id.auto_updates:
+                if (isCheckedUpdates) {
+                    isCheckedUpdates = false;
+                    item.setChecked(isCheckedUpdates);
+                } else {
+                    isCheckedUpdates = true;
+                    item.setChecked(isCheckedUpdates);
+                }
+                return true;
+
+            case R.id.action_notifications:
+                if (isCheckedNotification) {
+                    isCheckedNotification = false;
+                    item.setChecked(isCheckedNotification);
+                } else {
+                    isCheckedNotification = true;
+                    item.setChecked(isCheckedNotification);
+                }
+                return true;
+            case R.id.simple_view:
+                item.setChecked(true);
+                return true;
+            case R.id.popular_view:
+                item.setChecked(true);
+                return true;
+            case R.id.custom_view:
+                item.setChecked(true);
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

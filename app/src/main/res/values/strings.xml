@@ -24,4 +24,11 @@
     <string name="precipitation">Precipitation</string>
     <string name="temperature">temperature</string>
     <string name="other">Other City</string>
+    <string name="notifications">Notifications</string>
+    <string name="autoUpdates">Auto Updates</string>
+    <string name="simpleView">Simple View</string>
+    <string name="popularView">Popular View</string>
+    <string name="customView">Custom View</string>
+    <string name="action_add">Add</string>
+    <string name="submitReport">Submit Error</string>
 </resources>
