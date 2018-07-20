@@ -3,11 +3,15 @@ package com.geekbrains.weather;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.support.design.internal.NavigationMenu;
+import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -36,6 +41,7 @@ public class BaseActivity extends AppCompatActivity
     boolean isDrawerClose;
     String country;
     String name;
+    NavigationView navigationView;
 
 
 
@@ -57,9 +63,8 @@ public class BaseActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         fab = findViewById(R.id.fab);
 
@@ -102,9 +107,6 @@ public class BaseActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
-
-
 
 
     @Override
@@ -166,23 +168,21 @@ public class BaseActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
 // Handle navigation view item clicks here.
         int id = item.getItemId();
+
         if(id == R.id.nav_settings) {
             Toasty.success(BaseActivity.this, "Settings menu!!").show();
-            Log.d(NAV, "nav_settings!!");
             isDrawerClose=true;
 
         }
         else if (id == R.id.nav_info){
                 Toasty.success(this, "About menu!!").show();
-                Log.d(NAV, "About!!");
                 isDrawerClose=true;
 
         }
         else if (id == R.id.sub_report){
-                Log.d(NAV, "Submit Error!!");
-               PopupMenu popupMenu = new PopupMenu(this ,findViewById(R.id.nav_view));
-               popupMenu.inflate(R.menu.popup);
-               isDrawerClose=false;
+            PopupMenu popupMenu = new PopupMenu(this, item.getActionView());
+            popupMenu.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
+            isDrawerClose = false;
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
@@ -191,9 +191,9 @@ public class BaseActivity extends AppCompatActivity
                     return true;
                 }
             });
-                popupMenu.show();
-            }
-        Log.d(NAV, "Close !!");
+            popupMenu.show();
+
+        }
 
         if(isDrawerClose){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

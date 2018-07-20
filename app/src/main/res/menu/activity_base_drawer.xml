@@ -17,10 +17,11 @@
             android:title="@string/about" />
         <item
             android:id="@+id/sub_report"
-            android:orderInCategory="0"
+            android:orderInCategory="100"
             android:icon="@drawable/ic_input_black_24dp"
             android:title="@string/submitReport"
             app:showAsAction="always"
+            app:actionLayout="@layout/view_empty"
             />
     </group>
 
