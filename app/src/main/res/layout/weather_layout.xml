@@ -34,6 +34,7 @@
             android:textSize="20sp" />
 
         <TextView
+            android:id="@+id/tv_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -42,20 +43,15 @@
             android:text="+18"
             android:textColor="@android:color/white"
             android:textSize="80sp" />
-
-    </RelativeLayout>
-    <FrameLayout
-        android:id="@+id/data"
-        android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="0.4"
-        android:background="@color/purpleLight">
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:columnCount="6"
             android:rowCount="4"
-            android:layout_gravity="fill">
+            android:layout_weight="0.4"
+            android:layout_gravity="fill"
+            android:background="@color/purpleLight"
+            android:layout_below="@+id/tv_temperature">
 
             <ImageView
                 android:layout_width="0px"
@@ -132,6 +128,7 @@
 
                 />
             <TextView
+                android:id="@+id/tv_humidity"
                 android:layout_width="0px"                    android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:gravity="bottom"
@@ -321,7 +318,10 @@
                 />
 
         </GridLayout>
-    </FrameLayout>
+
+    </RelativeLayout>
+
+
 </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

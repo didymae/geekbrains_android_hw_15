@@ -32,4 +32,6 @@
     <string name="action_add">Add</string>
     <string name="submitReport">Submit Error</string>
     <string name="close_nav">Close Navigationn</string>
+    <string name="error_no_sensor">No sensor</string>
+    <string name="gps">Use GPS</string>
 </resources>

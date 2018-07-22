@@ -1,9 +1,19 @@
 package com.geekbrains.weather;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.location.LocationManager;
+import android.media.session.MediaSessionManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,16 +25,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class WeatherFragment extends BaseFragment implements /*Observer,*/ CreateActionFragment.OnHeadlineSelectedListener {
 
 
     private static final String ARG_COUNTRY = "ARG_COUNTRY";
     private String country;
-    private TextView textView;
+    private TextView textCity;
+    private TextView textTemp;
+    private TextView textHumidity;
     private boolean isCheckedNotification = false;
     private boolean isCheckedUpdates = false;
-
+    private boolean isCheckedUseGPS = false;
+    private SensorManager sensorManager;
+    private Sensor sensorTemp;
+    private Sensor sensorHumidity;
 
 
     public WeatherFragment() {
@@ -45,9 +63,17 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             country = getArguments().getString(ARG_COUNTRY);
-
         }
     }
+
+    private void initSensors() {
+        sensorManager = (SensorManager)getBaseActivity().getSystemService(Context.SENSOR_SERVICE);
+        sensorTemp = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+        sensorHumidity = sensorManager.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
+    }
+
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -69,18 +95,36 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
 
     @Override
     protected void initLayout(View view, Bundle savedInstanceState) {
+        //включаем меню
         setHasOptionsMenu(true);
-        textView = view.findViewById(R.id.tv_country);
-        if (textView != null) {
+        //инициализируем сенсоры и location
+        initSensors();
+
+        //инициализируем различные textview
+        textTemp = view.findViewById(R.id.tv_temperature);
+        textHumidity = view.findViewById(R.id.tv_humidity);
+       // textTemp.setText(sensorTemp.getPower();
+        textCity = view.findViewById(R.id.tv_country);
+
+        String sensor_error = getResources().getString(R.string.error_no_sensor);
+
+        if (sensorTemp == null) {
+            textTemp.setText(sensor_error);
+        }
+        if (sensorHumidity == null) {
+            textHumidity.setText(sensor_error);
+        }
+
+        if (textCity != null) {
             Log.d(ARG_COUNTRY, "NOTnull!!");
         }
         if (country != null && country.length() > 0) {
             Log.d(ARG_COUNTRY, "IN");
-            textView.setVisibility(View.VISIBLE);
-            textView.setText(country);
+            textCity.setVisibility(View.VISIBLE);
+            textCity.setText(country);
         } else {
             Log.d(ARG_COUNTRY, "ELSE");
-            textView.setVisibility(View.GONE);
+            textCity.setVisibility(View.GONE);
         }
     }
 
@@ -92,6 +136,8 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
     @Override
     public void onStart() {
         super.onStart();
+        sensorManager.registerListener(listenerTemp,sensorTemp,sensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(listenerHumidity,sensorHumidity,sensorManager.SENSOR_DELAY_FASTEST);
         Toast.makeText(getContext(), "onStartWeather", Toast.LENGTH_LONG).show();
     }
 
@@ -110,6 +156,8 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
     @Override
     public void onStop() {
         super.onStop();
+        sensorManager.unregisterListener(listenerTemp, sensorTemp);
+        sensorManager.unregisterListener(listenerHumidity, sensorHumidity);
         Toast.makeText(getContext(), "onStopWeather", Toast.LENGTH_SHORT).show();
     }
 
@@ -119,20 +167,12 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         Toast.makeText(getContext(), "onDestroyWeather", Toast.LENGTH_SHORT).show();
     }
 
-//    @Override
-//    public void updateText(String text) {
-//        country = text;
-//        Log.d(ARG_COUNTRY, country);
-//        if (textView == null) {
-//            Log.d(ARG_COUNTRY, "null");
-//        }
-//    }
 
     @Override
     public void onArticleSelected(ArrayList<String> citiesList) {
-        textView.setVisibility(View.VISIBLE);
+        textCity.setVisibility(View.VISIBLE);
         String cities = citiesList.toString();
-        textView.setText(cities.substring(cities.indexOf("[") + 1, cities.indexOf("]")));
+        textCity.setText(cities.substring(cities.indexOf("[") + 1, cities.indexOf("]")));
     }
     @Override
     public void onCreateOptionsMenu(Menu menu,MenuInflater inflater) {
@@ -152,7 +192,16 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         switch (id) {
             case R.id.action_settings:
                 return true;
-            case R.id.action_add:
+            case R.id.use_gps:
+                if (isCheckedUseGPS) {
+                    isCheckedUseGPS = false;
+                    item.setChecked(isCheckedUseGPS);
+                } else {
+                    isCheckedUseGPS = true;
+                    getBaseActivity().requestLocationPermission();
+                    item.setChecked(isCheckedUseGPS);
+                    Log.d(ARG_COUNTRY, "setschecked");
+                }
                 return true;
             case R.id.auto_updates:
                 if (isCheckedUpdates) {
@@ -187,5 +236,47 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    SensorEventListener listenerHumidity = new SensorEventListener() {
+
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            showHumiditySensor(sensorEvent);
+
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
+
+
+    SensorEventListener listenerTemp = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent sensorEvent) {
+            showTempSensor(sensorEvent);
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int i) {
+
+        }
+    };
+
+    private void showTempSensor(SensorEvent event){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(event.values[0]);
+        textTemp.setText(stringBuilder);
+    }
+    private void showHumiditySensor(SensorEvent event) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(event.values[0]);
+        textHumidity.setText(stringBuilder);
+    }
+
+
 
 }

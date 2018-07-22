@@ -1,14 +1,18 @@
 package com.geekbrains.weather;
 
+import android.Manifest;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.internal.NavigationMenu;
 import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -31,10 +35,10 @@ import es.dmoral.toasty.Toasty;
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
 public class BaseActivity extends AppCompatActivity
-        implements BaseView.View, BaseFragment.Callback, NavigationView.OnNavigationItemSelectedListener {
+        implements BaseView.View, BaseFragment.Callback, NavigationView.OnNavigationItemSelectedListener,ActivityCompat.OnRequestPermissionsResultCallback {
     private FloatingActionButton fab;
     private TextView textView;
-    private static final String TEXT = "TEXT";
+    private static final String TEXT = "TEXT_LOG";
     private static final String DEFAULT_COUNTRY = "Moscow";
     private static final String NAV= "NAV";
     boolean isExistAction;  // Можно ли расположить рядом фрагмент
@@ -42,6 +46,8 @@ public class BaseActivity extends AppCompatActivity
     String country;
     String name;
     NavigationView navigationView;
+    private static final int PERMISSION_REQUEST_CODE = 10;
+
 
 
 
@@ -176,7 +182,7 @@ public class BaseActivity extends AppCompatActivity
         }
         else if (id == R.id.nav_info){
                 Toasty.success(this, "About menu!!").show();
-                isDrawerClose=true;
+                isDrawerClose = true;
 
         }
         else if (id == R.id.sub_report){
@@ -200,6 +206,37 @@ public class BaseActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);}
         return true;
     }
+
+    public void requestLocationPermission() {
+        if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+// Запрашиваем разрешения у пользователя
+            ActivityCompat.requestPermissions(this, new
+                    String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+            Log.d(TEXT, "requestLocationPermission");
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[]
+            permissions, @NonNull int[] grantResults) {
+        Log.d(TEXT, "onRequestPermissionsResult");
+
+//  Проверяем код чтоб убедиться что это то самое разрешение?
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] ==
+                    PackageManager.PERMISSION_GRANTED) {
+//разрешение получено, покажем сообщение
+
+                Log.d(TEXT, "Permission granted");
+
+
+            } else
+                Log.d(TEXT, "Permission not granted");
+        }
+    }
+
 
 
 }
