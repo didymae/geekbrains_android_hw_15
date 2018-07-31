@@ -34,4 +34,5 @@
     <string name="close_nav">Close Navigationn</string>
     <string name="error_no_sensor">No sensor</string>
     <string name="gps">Use GPS</string>
+    <string name="web_gismeteo">Gismeteo</string>
 </resources>

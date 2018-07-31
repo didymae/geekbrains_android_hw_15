@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.geekbrains.weather.BaseActivity">
+        tools:context=".ui.base.BaseActivity">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
             <!-- Фрагмент с погодой  -->
             <fragment
                 android:id="@+id/cities"
-                android:name="com.geekbrains.weather.WeatherFragment"
+                android:name="com.geekbrains.weather.ui.weather.WeatherFragment"
                 android:layout_width="0px"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />

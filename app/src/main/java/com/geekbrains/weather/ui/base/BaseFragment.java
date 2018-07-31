@@ -1,4 +1,4 @@
-package com.geekbrains.weather;
+package com.geekbrains.weather.ui.base;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,7 @@ import android.view.View;
 
 
 
-abstract class BaseFragment extends Fragment implements BaseView.View {
+public abstract class BaseFragment extends Fragment implements BaseView.View {
 
     private BaseActivity baseActivity;
 

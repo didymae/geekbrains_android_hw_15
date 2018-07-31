@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.geekbrains.weather.BaseActivity"
+    tools:context=".ui.base.BaseActivity"
     android:fitsSystemWindows="true"
     android:background="@color/purpleLight">
 
@@ -26,15 +26,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginBottom="@dimen/mtrl_bottomappbar_fab_cradle_diameter">
+            android:layout_marginBottom="@dimen/fab_margin">
 
             <!-- Фрагмент с погодой  -->
 
             <FrameLayout
                 android:id="@+id/main_frame"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/fab_margin"/>
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.geekbrains.weather;
+package com.geekbrains.weather.ui.temperature;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import com.geekbrains.weather.R;
+
 import java.util.List;
 
 

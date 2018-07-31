@@ -16,6 +16,11 @@
             android:icon="@drawable/ic_info_outline_24dp"
             android:title="@string/about" />
         <item
+            android:id="@+id/nav_web"
+            android:orderInCategory="90"
+            android:icon="@drawable/ic_system_update_alt_black_24dp"
+            android:title="@string/web_gismeteo" />
+        <item
             android:id="@+id/sub_report"
             android:orderInCategory="100"
             android:icon="@drawable/ic_input_black_24dp"

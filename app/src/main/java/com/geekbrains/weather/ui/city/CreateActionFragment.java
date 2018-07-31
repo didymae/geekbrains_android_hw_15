@@ -1,4 +1,4 @@
-package com.geekbrains.weather;
+package com.geekbrains.weather.ui.city;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,13 +22,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geekbrains.weather.R;
+import com.geekbrains.weather.ui.temperature.TemperatureFragment;
+import com.geekbrains.weather.ui.weather.WeatherFragment;
+import com.geekbrains.weather.ui.base.BaseFragment;
+
 import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
-/**
- * Created by shkryaba on 24/06/2018.
- */
+
 
 public class CreateActionFragment extends BaseFragment {
 

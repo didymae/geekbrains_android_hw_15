@@ -1,4 +1,4 @@
-package com.geekbrains.weather;
+package com.geekbrains.weather.ui.base;
 
 import android.graphics.Bitmap;
 

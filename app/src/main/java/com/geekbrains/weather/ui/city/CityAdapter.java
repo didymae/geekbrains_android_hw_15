@@ -1,8 +1,7 @@
-package com.geekbrains.weather;
+package com.geekbrains.weather.ui.city;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,8 +11,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.geekbrains.weather.R;
+
 import java.util.ArrayList;
-import java.util.Iterator;
 
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {

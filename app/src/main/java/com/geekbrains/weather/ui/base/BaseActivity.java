@@ -1,34 +1,36 @@
-package com.geekbrains.weather;
+package com.geekbrains.weather.ui.base;
 
 import android.Manifest;
-import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Icon;
+import android.hardware.Sensor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.internal.NavigationMenu;
-import android.support.design.internal.NavigationMenuItemView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import com.geekbrains.weather.service.MainService;
+import com.geekbrains.weather.service.MyService;
+import com.geekbrains.weather.ui.city.CreateActionFragment;
+import com.geekbrains.weather.R;
+import com.geekbrains.weather.ui.geoweb.GeoFragment;
+import com.geekbrains.weather.ui.weather.WeatherFragment;
 
 import es.dmoral.toasty.Toasty;
 
@@ -47,6 +49,12 @@ public class BaseActivity extends AppCompatActivity
     String name;
     NavigationView navigationView;
     private static final int PERMISSION_REQUEST_CODE = 10;
+    public final static String BROADCAST_ACTION = "BROADCAST_ACTION";
+    public final static String  SENSOR_VAL = "SENSOR_VAL";
+    public final static String  SENSOR_TYPE = "SENSOR_TYPE";
+    private BroadcastReceiver broadcastReceiver;
+    private TextView textTemp;
+    private TextView textHumidity;
 
 
 
@@ -57,7 +65,40 @@ public class BaseActivity extends AppCompatActivity
         setContentView(R.layout.activity_base);
 
         initLayout();
+        Intent intent = new Intent(BaseActivity.this, MyService.class);
+        startService(intent);
+
+        IntentFilter intentValue = new IntentFilter(BROADCAST_ACTION);
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String value = String.valueOf(intent.getFloatExtra(SENSOR_VAL, 0));
+                int type = intent.getIntExtra(SENSOR_TYPE,0);
+                setSensorValue(value,type);
+                Log.d(SENSOR_VAL, value);
+
+            }
+
+
+        };
+        registerReceiver(broadcastReceiver, intentValue);
     }
+    private void setSensorValue(String value, int type) {
+
+        if(Sensor.TYPE_AMBIENT_TEMPERATURE == type){
+            textTemp = findViewById(R.id.tv_temperature);
+            textTemp.setText(value);
+            Log.d(SENSOR_TYPE, value);
+
+        } else if (type == Sensor.TYPE_RELATIVE_HUMIDITY){
+            textHumidity = findViewById(R.id.tv_humidity);
+            textHumidity.setText(value);
+            Log.d(SENSOR_TYPE, value);
+
+        } else Log.d(SENSOR_TYPE, "else");
+
+    }
+
 
     private void initLayout() {
 
@@ -184,7 +225,9 @@ public class BaseActivity extends AppCompatActivity
                 Toasty.success(this, "About menu!!").show();
                 isDrawerClose = true;
 
-        }
+        } else if (id == R.id.nav_web) {
+            replaceMainFragment(new GeoFragment());}
+
         else if (id == R.id.sub_report){
             PopupMenu popupMenu = new PopupMenu(this, item.getActionView());
             popupMenu.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
