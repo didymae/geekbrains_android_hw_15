@@ -74,28 +74,28 @@ public class BaseActivity extends AppCompatActivity
             public void onReceive(Context context, Intent intent) {
                 String value = String.valueOf(intent.getFloatExtra(SENSOR_VAL, 0));
                 int type = intent.getIntExtra(SENSOR_TYPE,0);
+                if( getCurrentFragment() instanceof WeatherFragment){
                 setSensorValue(value,type);
-                Log.d(SENSOR_VAL, value);
+                Log.d(SENSOR_VAL, value);}
 
             }
 
 
         };
         registerReceiver(broadcastReceiver, intentValue);
+
     }
     private void setSensorValue(String value, int type) {
 
         if(Sensor.TYPE_AMBIENT_TEMPERATURE == type){
             textTemp = findViewById(R.id.tv_temperature);
             textTemp.setText(value);
-            Log.d(SENSOR_TYPE, value);
 
         } else if (type == Sensor.TYPE_RELATIVE_HUMIDITY){
             textHumidity = findViewById(R.id.tv_humidity);
             textHumidity.setText(value);
-            Log.d(SENSOR_TYPE, value);
 
-        } else Log.d(SENSOR_TYPE, "else");
+        }
 
     }
 
@@ -154,7 +154,10 @@ public class BaseActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
+    private Fragment getCurrentFragment() {
+        //получаем наименование фрагмента находящегося в контейнере в данных момент
+        return getSupportFragmentManager().findFragmentById(R.id.main_frame);
+    }
 
     @Override
     public Boolean inNetworkAvailable() {

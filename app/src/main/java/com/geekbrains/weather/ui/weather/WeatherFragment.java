@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geekbrains.weather.Constants;
+import com.geekbrains.weather.PrefsData;
+import com.geekbrains.weather.PrefsHelper;
 import com.geekbrains.weather.R;
 import com.geekbrains.weather.ui.base.BaseActivity;
 import com.geekbrains.weather.ui.city.CreateActionFragment;
@@ -34,6 +37,8 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
     private boolean isCheckedNotification = false;
     private boolean isCheckedUpdates = false;
     private boolean isCheckedUseGPS = false;
+    private PrefsHelper prefsHelper;
+
 
 
 
@@ -56,6 +61,8 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         if (getArguments() != null) {
             country = getArguments().getString(ARG_COUNTRY);
         }
+        prefsHelper = new PrefsData(getBaseActivity());
+
     }
 
 
@@ -87,7 +94,6 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         textCity = view.findViewById(R.id.tv_country);
 
         if (textCity != null) {
-            Log.d(ARG_COUNTRY, "NOTnull!!");
         }
         if (country != null && country.length() > 0) {
             Log.d(ARG_COUNTRY, "IN");
@@ -96,6 +102,12 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         } else {
             Log.d(ARG_COUNTRY, "ELSE");
             textCity.setVisibility(View.GONE);
+        }
+
+        String getSP = prefsHelper.getSharedPreferences(Constants.CITY);
+        if (!getSP.equals("")) {
+            textCity.setVisibility(View.VISIBLE);
+            textCity.setText(getSP);
         }
     }
 

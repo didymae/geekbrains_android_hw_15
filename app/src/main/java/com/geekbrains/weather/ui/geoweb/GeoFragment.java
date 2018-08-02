@@ -28,7 +28,7 @@ public class GeoFragment extends BaseFragment {
         tvProgress = view.findViewById(R.id.status);
         webView = view.findViewById(R.id.webView);
 
-        final RequestMaker requestMaker = new RequestMaker(new RequestMaker.OnRequestListener() {
+ /*       final RequestMaker requestMaker = new RequestMaker(new RequestMaker.OnRequestListener() {
             @Override
             public void onStatusProgress(String updateProgress) {
                 tvProgress.setText(updateProgress);
@@ -38,8 +38,16 @@ public class GeoFragment extends BaseFragment {
             public void onComplete(String result) {
                 webView.loadData(result, "text/html; charset=utf-8", "utf-8");
             }
+        });*/
+        final OkHttpRequester requester = new OkHttpRequester(new OkHttpRequester.OnResponseCompleted() {
+            @Override
+            public void onCompleted(String content) {
+                webView.loadData(content, "text/html; charset=utf-8", "utf-8");
+            }
         });
 
-        requestMaker.make("https://www.gismeteo.ru/weather-moscow-4368/3-days/");
+        requester.run("https://www.gismeteo.ru/weather-moscow-4368/3-days/");
+
+//        requestMaker.make("https://www.gismeteo.ru/weather-moscow-4368/3-days/");
     }
 }

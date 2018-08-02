@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geekbrains.weather.R;
+import com.geekbrains.weather.model.SelectedCity;
 import com.geekbrains.weather.ui.temperature.TemperatureFragment;
 import com.geekbrains.weather.ui.weather.WeatherFragment;
 import com.geekbrains.weather.ui.base.BaseFragment;
@@ -42,7 +43,7 @@ public class CreateActionFragment extends BaseFragment {
     String country;
     TextView textViewName;
     private RecyclerView recyclerView;
-    private ArrayList<String> cityList;
+    private ArrayList<SelectedCity> cityList;
     private TextInputLayout textInputLayout;
 
 
@@ -93,7 +94,7 @@ public class CreateActionFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        CityAdapter cityAdapter = new CityAdapter(getContext(), cityList, mCallback);
+        CityAdapter cityAdapter = new CityAdapter(getContext(), cityList, mCallback,getBaseActivity());
         recyclerView.setAdapter(cityAdapter);
 
         //инициализация edittext и листенер на ключи при взаимодействии с ним, когда мы нашимаем enter у нас опускается клавиатура и запускается WeatherFragment
@@ -131,7 +132,7 @@ public class CreateActionFragment extends BaseFragment {
                             intent.putExtra("name", name);
                             textViewName = (TextView) getBaseActivity().findViewById(R.id.tvUsername);
                             textViewName.setText(name);
-                            getBaseActivity().replaceMainFragment(WeatherFragment.newInstance(country));
+                            getBaseActivity().replaceMainFragment(new WeatherFragment());
 
 
                         }
@@ -203,9 +204,21 @@ public class CreateActionFragment extends BaseFragment {
 
     private void initCountryList() {
         cityList = new ArrayList<>();
-        cityList.add("Moscow");
-        cityList.add("St. Peterburg");
-        cityList.add("Kazan");
+        SelectedCity selectedCity1 = new SelectedCity();
+        selectedCity1.setCity("Moscow");
+        selectedCity1.setSelected(false);
+
+        SelectedCity selectedCity2 = new SelectedCity();
+        selectedCity2.setCity("St. Peterburg");
+        selectedCity2.setSelected(false);
+
+        SelectedCity selectedCity3 = new SelectedCity();
+        selectedCity3.setCity("Kazan");
+        selectedCity3.setSelected(false);
+
+        cityList.add(selectedCity1);
+        cityList.add(selectedCity2);
+        cityList.add(selectedCity3);
     }
 
 }
