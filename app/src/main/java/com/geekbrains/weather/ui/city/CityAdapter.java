@@ -1,7 +1,6 @@
 package com.geekbrains.weather.ui.city;
 
         import android.content.Context;
-        import android.graphics.Color;
         import android.support.annotation.NonNull;
         import android.support.v7.widget.CardView;
         import android.support.v7.widget.RecyclerView;
@@ -12,8 +11,8 @@ package com.geekbrains.weather.ui.city;
         import android.widget.TextView;
 
         import com.geekbrains.weather.Constants;
-        import com.geekbrains.weather.PrefsData;
-        import com.geekbrains.weather.PrefsHelper;
+        import com.geekbrains.weather.data.PrefsData;
+        import com.geekbrains.weather.data.PrefsHelper;
         import com.geekbrains.weather.R;
         import com.geekbrains.weather.model.SelectedCity;
         import com.geekbrains.weather.ui.base.BaseActivity;

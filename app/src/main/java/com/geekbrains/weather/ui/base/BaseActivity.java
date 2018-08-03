@@ -25,28 +25,33 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.geekbrains.weather.Constants;
+import com.geekbrains.weather.data.PrefsData;
+import com.geekbrains.weather.data.PrefsHelper;
+import com.geekbrains.weather.data.data.DataManager;
+import com.geekbrains.weather.data.data.IDataManager;
+import com.geekbrains.weather.model.weather.WeatherRequest;
 import com.geekbrains.weather.service.MainService;
 import com.geekbrains.weather.service.MyService;
 import com.geekbrains.weather.ui.city.CreateActionFragment;
 import com.geekbrains.weather.R;
 import com.geekbrains.weather.ui.geoweb.GeoFragment;
+import com.geekbrains.weather.ui.geoweb.OkHttpRequester;
 import com.geekbrains.weather.ui.weather.WeatherFragment;
 
 import es.dmoral.toasty.Toasty;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static com.geekbrains.weather.Constants.KEYAPI;
 
 public class BaseActivity extends AppCompatActivity
         implements BaseView.View, BaseFragment.Callback, NavigationView.OnNavigationItemSelectedListener,ActivityCompat.OnRequestPermissionsResultCallback {
     private FloatingActionButton fab;
-    private TextView textView;
     private static final String TEXT = "TEXT_LOG";
-    private static final String DEFAULT_COUNTRY = "Moscow";
-    private static final String NAV= "NAV";
+    private static final String DEFAULT_CITY = "Moscow";
     boolean isExistAction;  // Можно ли расположить рядом фрагмент
     boolean isDrawerClose;
     String country;
-    String name;
     NavigationView navigationView;
     private static final int PERMISSION_REQUEST_CODE = 10;
     public final static String BROADCAST_ACTION = "BROADCAST_ACTION";
@@ -55,6 +60,12 @@ public class BaseActivity extends AppCompatActivity
     private BroadcastReceiver broadcastReceiver;
     private TextView textTemp;
     private TextView textHumidity;
+    private PrefsHelper prefsHelper;
+    private TextView textWind;
+    private TextView textPressure;
+    private TextView textFeelsLike;
+    private TextView textVisibility;
+    private TextView textPrecipitation;
 
 
 
@@ -63,8 +74,18 @@ public class BaseActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+        prefsHelper = new PrefsData(this);
 
+        //инициализируем layout
         initLayout();
+
+        //получаем данные о погоде
+        String citySP = prefsHelper.getSharedPreferences(Constants.CITY);
+        if (!citySP.equals("")) {
+            initRetrofitComponent(citySP);}
+            else initRetrofitComponent(DEFAULT_CITY);
+
+        //запускаем службу
         Intent intent = new Intent(BaseActivity.this, MyService.class);
         startService(intent);
 
@@ -75,17 +96,38 @@ public class BaseActivity extends AppCompatActivity
                 String value = String.valueOf(intent.getFloatExtra(SENSOR_VAL, 0));
                 int type = intent.getIntExtra(SENSOR_TYPE,0);
                 if( getCurrentFragment() instanceof WeatherFragment){
-                setSensorValue(value,type);
-                Log.d(SENSOR_VAL, value);}
+           //     setSensorValue(value,type);
+          //      Log.d(SENSOR_VAL, value);
 
+                }
             }
-
 
         };
         registerReceiver(broadcastReceiver, intentValue);
 
     }
-    private void setSensorValue(String value, int type) {
+
+    private void initRetrofitComponent(String city) {
+        IDataManager dataManager = new DataManager(new DataManager.OnResponseCompleted() {
+            @Override
+            public void onCompleted(WeatherRequest response) {
+                if( getCurrentFragment() instanceof WeatherFragment){
+                    textTemp.setText(Double.toString(response.getMain().getTemp()));
+                    textHumidity.setText(Double.toString(response.getMain().getHumidity()));
+                    textPressure.setText(Double.toString(response.getMain().getPressure()));
+                    textWind.setText(Double.toString(response.getWind().getSpeed()));
+                    textVisibility.setText(Double.toString(response.getVisibility()));
+
+                }
+
+            }
+        });
+        dataManager.initRetrofit();
+        dataManager.requestRetrofit(city, KEYAPI);
+
+    }
+
+   /* private void setSensorValue(String value, int type) {
 
         if(Sensor.TYPE_AMBIENT_TEMPERATURE == type){
             textTemp = findViewById(R.id.tv_temperature);
@@ -97,7 +139,7 @@ public class BaseActivity extends AppCompatActivity
 
         }
 
-    }
+    }*/
 
 
     private void initLayout() {
@@ -113,8 +155,17 @@ public class BaseActivity extends AppCompatActivity
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fab = findViewById(R.id.fab);
 
+        textHumidity = findViewById(R.id.tv_humidity);
+        textTemp = findViewById(R.id.tv_temperature);
+        textWind = findViewById(R.id.tv_wind);
+        textVisibility = findViewById(R.id.tv_visibility);
+        textPrecipitation = findViewById(R.id.tv_precipitation);
+        textPressure = findViewById(R.id.tv_pressure);
+        textFeelsLike = findViewById(R.id.tv_feels_like);
+
+
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,7 +187,7 @@ public class BaseActivity extends AppCompatActivity
 
         if (getResources().getConfiguration().orientation != ORIENTATION_LANDSCAPE) {
             if (country == null) {
-                addMainFragment(WeatherFragment.newInstance(DEFAULT_COUNTRY));}
+                addMainFragment(WeatherFragment.newInstance(DEFAULT_CITY));}
 
             else {
                 replaceMainFragment(WeatherFragment.newInstance(country));

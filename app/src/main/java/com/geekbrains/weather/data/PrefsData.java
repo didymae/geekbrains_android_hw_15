@@ -1,6 +1,5 @@
-package com.geekbrains.weather;
+package com.geekbrains.weather.data;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.geekbrains.weather.ui.base.BaseActivity;

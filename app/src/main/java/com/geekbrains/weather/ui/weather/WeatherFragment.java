@@ -1,10 +1,6 @@
 package com.geekbrains.weather.ui.weather;
 
 import android.content.Context;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,16 +11,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geekbrains.weather.Constants;
-import com.geekbrains.weather.PrefsData;
-import com.geekbrains.weather.PrefsHelper;
+import com.geekbrains.weather.data.PrefsData;
+import com.geekbrains.weather.data.PrefsHelper;
 import com.geekbrains.weather.R;
 import com.geekbrains.weather.ui.base.BaseActivity;
 import com.geekbrains.weather.ui.city.CreateActionFragment;
 import com.geekbrains.weather.ui.base.*;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -34,6 +32,7 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
     private static final String ARG_COUNTRY = "ARG_COUNTRY";
     private String country;
     private TextView textCity;
+    private ImageView imageView;
     private boolean isCheckedNotification = false;
     private boolean isCheckedUpdates = false;
     private boolean isCheckedUseGPS = false;
@@ -88,10 +87,12 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
     protected void initLayout(View view, Bundle savedInstanceState) {
         //включаем меню
         setHasOptionsMenu(true);
-        //инициализируем сенсоры и location
 
         //инициализируем различные textview
         textCity = view.findViewById(R.id.tv_country);
+        //получаем картинку из интернета
+        Picasso.with(getContext()).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+
 
         if (textCity != null) {
         }
@@ -104,10 +105,10 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
             textCity.setVisibility(View.GONE);
         }
 
-        String getSP = prefsHelper.getSharedPreferences(Constants.CITY);
-        if (!getSP.equals("")) {
+        String citySP = prefsHelper.getSharedPreferences(Constants.CITY);
+        if (!citySP.equals("")) {
             textCity.setVisibility(View.VISIBLE);
-            textCity.setText(getSP);
+            textCity.setText(citySP);
         }
     }
 
@@ -191,6 +192,8 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
                     isCheckedUpdates = true;
                     item.setChecked(isCheckedUpdates);
                 }
+                prefsHelper.saveSharedPreferences(Constants.AUTO_UPDATES, String.valueOf(isCheckedUpdates));
+
                 return true;
 
             case R.id.action_notifications:

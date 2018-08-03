@@ -71,6 +71,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_feels_like"
                 android:layout_width="0px"
                 android:layout_centerVertical="true"
                 android:gravity="bottom"
@@ -100,6 +101,7 @@
 
                 />
             <TextView
+                android:id="@+id/tv_pressure"
                 android:layout_width="0px"
                 android:layout_centerVertical="true"
                 android:gravity="bottom"
@@ -201,6 +203,7 @@
 
                 />
             <TextView
+                android:id="@+id/tv_wind"
                 android:layout_width="0px"
                 android:layout_centerVertical="true"
                 android:gravity="bottom"
@@ -230,6 +233,7 @@
 
                 />
             <TextView
+                android:id="@+id/tv_visibility"
                 android:layout_width="0px"
                 android:layout_centerVertical="true"
                 android:gravity="bottom"
@@ -259,6 +263,7 @@
 
                 />
             <TextView
+                android:id="@+id/tv_precipitation"
                 android:layout_width="0px"                    android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:gravity="bottom"
@@ -292,7 +297,7 @@
                 android:layout_width="0px"
                 android:layout_centerVertical="true"
                 android:gravity="top"
-                android:text="@string/humidity"
+                android:text="@string/visibility"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:layout_rowWeight="1"
