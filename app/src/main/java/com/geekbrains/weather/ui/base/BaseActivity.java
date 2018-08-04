@@ -43,6 +43,7 @@ import es.dmoral.toasty.Toasty;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.geekbrains.weather.Constants.KEYAPI;
+import static com.geekbrains.weather.Constants.TEMP_K;
 
 public class BaseActivity extends AppCompatActivity
         implements BaseView.View, BaseFragment.Callback, NavigationView.OnNavigationItemSelectedListener,ActivityCompat.OnRequestPermissionsResultCallback {
@@ -112,7 +113,16 @@ public class BaseActivity extends AppCompatActivity
             @Override
             public void onCompleted(WeatherRequest response) {
                 if( getCurrentFragment() instanceof WeatherFragment){
-                    textTemp.setText(Double.toString(response.getMain().getTemp()));
+
+                    textHumidity = findViewById(R.id.tv_humidity);
+                    textTemp = findViewById(R.id.tv_temperature);
+                    textWind = findViewById(R.id.tv_wind);
+                    textVisibility = findViewById(R.id.tv_visibility);
+                    textPrecipitation = findViewById(R.id.tv_precipitation);
+                    textPressure = findViewById(R.id.tv_pressure);
+                    textFeelsLike = findViewById(R.id.tv_feels_like);
+
+                    textTemp.setText(Long.toString(Math.round(response.getMain().getTemp()-TEMP_K)));
                     textHumidity.setText(Double.toString(response.getMain().getHumidity()));
                     textPressure.setText(Double.toString(response.getMain().getPressure()));
                     textWind.setText(Double.toString(response.getWind().getSpeed()));
@@ -123,7 +133,8 @@ public class BaseActivity extends AppCompatActivity
             }
         });
         dataManager.initRetrofit();
-        dataManager.requestRetrofit(city, KEYAPI);
+
+        dataManager.requestRetrofit(city+",ru", KEYAPI);
 
     }
 
@@ -156,13 +167,7 @@ public class BaseActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        textHumidity = findViewById(R.id.tv_humidity);
-        textTemp = findViewById(R.id.tv_temperature);
-        textWind = findViewById(R.id.tv_wind);
-        textVisibility = findViewById(R.id.tv_visibility);
-        textPrecipitation = findViewById(R.id.tv_precipitation);
-        textPressure = findViewById(R.id.tv_pressure);
-        textFeelsLike = findViewById(R.id.tv_feels_like);
+
 
 
         fab = findViewById(R.id.fab);

@@ -51,8 +51,8 @@ public class MyService extends Service implements SensorEventListener  {
     @Override
     public void onDestroy() {
         // Уничтожение службы
-        sensorManager.registerListener(this,sensorTemp,sensorManager.SENSOR_DELAY_FASTEST);
-        sensorManager.registerListener(this,sensorHumidity,sensorManager.SENSOR_DELAY_FASTEST);
+     //   sensorManager.registerListener(this,sensorTemp,sensorManager.SENSOR_DELAY_FASTEST);
+     //   sensorManager.registerListener(this,sensorHumidity,sensorManager.SENSOR_DELAY_FASTEST);
     }
 
 

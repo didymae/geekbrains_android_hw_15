@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DataManager implements IDataManager {
 
-    private static final String BASE_URL = "https://samples.openweathermap.org/";
+    private static final String BASE_URL = "https://api.openweathermap.org/";
     private static final String TAG = "DataManager";
     private OpenWeather openWeather;
 
