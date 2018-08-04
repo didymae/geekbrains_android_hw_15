@@ -92,7 +92,7 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         textCity = view.findViewById(R.id.tv_country);
         imageView = view.findViewById(R.id.ivWeather);
         //получаем картинку из интернета
-        Picasso.with(getContext()).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+        Picasso.with(getContext()).load("https://i.imgur.com/DvpvklR.png").into(imageView);
 
 
         if (textCity != null) {

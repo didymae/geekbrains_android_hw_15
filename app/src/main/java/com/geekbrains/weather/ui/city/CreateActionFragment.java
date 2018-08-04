@@ -209,7 +209,7 @@ public class CreateActionFragment extends BaseFragment {
         selectedCity1.setSelected(false);
 
         SelectedCity selectedCity2 = new SelectedCity();
-        selectedCity2.setCity("St. Peterburg");
+        selectedCity2.setCity("Saint Petersburg");
         selectedCity2.setSelected(false);
 
         SelectedCity selectedCity3 = new SelectedCity();
