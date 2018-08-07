@@ -35,4 +35,18 @@
     <string name="error_no_sensor">No sensor</string>
     <string name="gps">Use GPS</string>
     <string name="web_gismeteo">Gismeteo</string>
+    <string name="menu_add">Add</string>
+    <string name="menu_clear">Clear</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
+    <string name="title_add">Add title</string>
+    <string name="cancel">Cancel</string>
+    <string name="title">Title</string>
+    <string name="note">Note</string>
+    <string name="description">Descripton</string>
+    <string name="time">HH:mm</string>
+    <string name="date">dd.mm.yyyy</string>
+    <string name="menu_weather">Show weather</string>
+    <string name="weather_forecast">Weather forecast</string>
+    <string name="ok">ok</string>
 </resources>

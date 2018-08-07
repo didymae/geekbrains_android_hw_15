@@ -20,14 +20,18 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/purpleDark</item>
+    </style>
+
     <style name="AppTheme.NoActionBar" parent="CustomAppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="CustomAppTheme" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="CustomAppTheme" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ErrorText" parent="TextAppearance.AppCompat.Small">
         <item name="android:textStyle">bold|italic</item>

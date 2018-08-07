@@ -37,6 +37,8 @@ import com.geekbrains.weather.ui.city.CreateActionFragment;
 import com.geekbrains.weather.R;
 import com.geekbrains.weather.ui.geoweb.GeoFragment;
 import com.geekbrains.weather.ui.geoweb.OkHttpRequester;
+import com.geekbrains.weather.ui.plan.PlanFragment;
+import com.geekbrains.weather.ui.temperature.TemperatureFragment;
 import com.geekbrains.weather.ui.weather.WeatherFragment;
 
 import es.dmoral.toasty.Toasty;
@@ -133,7 +135,6 @@ public class BaseActivity extends AppCompatActivity
             }
         });
         dataManager.initRetrofit();
-
         dataManager.requestRetrofit(city+",ru", KEYAPI);
 
     }
@@ -165,10 +166,6 @@ public class BaseActivity extends AppCompatActivity
         toggle.syncState();
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
-
-
 
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -203,9 +200,19 @@ public class BaseActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        //закрываем drawer если он был открыт при нажатии на аппаратную клавишу назад
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (getCurrentFragment() instanceof CreateActionFragment) {
+            addMainFragment(new WeatherFragment());
+        } else if (getCurrentFragment() instanceof GeoFragment) {
+            addMainFragment(new WeatherFragment());
+        } else if (getCurrentFragment() instanceof PlanFragment) {
+            addMainFragment(new WeatherFragment());
+        } else if (getCurrentFragment() instanceof TemperatureFragment) {
+            addMainFragment(new WeatherFragment());
         } else {
             super.onBackPressed();
         }
@@ -247,7 +254,7 @@ public class BaseActivity extends AppCompatActivity
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_frame, fragment)
-                .addToBackStack("")
+            //    .addToBackStack("")
                 .commit();
     }
 
@@ -256,7 +263,7 @@ public class BaseActivity extends AppCompatActivity
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_frame, fragment)
-                .addToBackStack("")
+           //     .addToBackStack("")
                 .commit();
     }
 
@@ -279,15 +286,14 @@ public class BaseActivity extends AppCompatActivity
             Toasty.success(BaseActivity.this, "Settings menu!!").show();
             isDrawerClose=true;
 
-        }
-        else if (id == R.id.nav_info){
+        } else if (id == R.id.nav_info){
                 Toasty.success(this, "About menu!!").show();
                 isDrawerClose = true;
-
         } else if (id == R.id.nav_web) {
-            replaceMainFragment(new GeoFragment());}
-
-        else if (id == R.id.sub_report){
+            replaceMainFragment(new GeoFragment());
+        } else if (id == R.id.nav_note) {
+            replaceMainFragment(new PlanFragment());
+        } else if (id == R.id.sub_report){
             PopupMenu popupMenu = new PopupMenu(this, item.getActionView());
             popupMenu.getMenuInflater().inflate(R.menu.popup, popupMenu.getMenu());
             isDrawerClose = false;

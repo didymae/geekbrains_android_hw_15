@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/et_note_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_padding_small"
+        android:layout_marginEnd="@dimen/default_padding_small"
+        android:layout_marginStart="@dimen/default_padding_small"
+        android:layout_marginTop="@dimen/default_padding"
+        android:inputType="text"
+        android:hint="@string/title"/>
+
+    <EditText
+        android:id="@+id/et_note_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_padding_small"
+        android:layout_marginEnd="@dimen/default_padding_small"
+        android:layout_marginStart="@dimen/default_padding_small"
+        android:layout_marginTop="@dimen/default_padding"
+        android:inputType="text"
+        android:hint="@string/description"/>
+    <EditText
+        android:id="@+id/et_note_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_padding_small"
+        android:layout_marginEnd="@dimen/default_padding_small"
+        android:layout_marginStart="@dimen/default_padding_small"
+        android:layout_marginTop="@dimen/default_padding"
+        android:inputType="none"
+        android:hint="@string/date"/>
+    <EditText
+        android:id="@+id/et_note_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/default_padding_small"
+        android:layout_marginEnd="@dimen/default_padding_small"
+        android:layout_marginStart="@dimen/default_padding_small"
+        android:layout_marginTop="@dimen/default_padding"
+        android:inputType="time"
+        android:hint="@string/time"/>
+
+</LinearLayout>

@@ -3,9 +3,7 @@ package com.geekbrains.weather.model.weather;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by shkryaba on 01/08/2018.
- */
+
 
 public class Weather {
 
