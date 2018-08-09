@@ -1,6 +1,7 @@
 package com.geekbrains.weather.ui.weather;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -172,8 +173,6 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
         //noinspection SimplifiableIfStatement
 
         switch (id) {
-            case R.id.action_settings:
-                return true;
             case R.id.use_gps:
                 if (isCheckedUseGPS) {
                     isCheckedUseGPS = false;
@@ -206,14 +205,12 @@ public class WeatherFragment extends BaseFragment implements /*Observer,*/ Creat
                     item.setChecked(isCheckedNotification);
                 }
                 return true;
-            case R.id.simple_view:
-                item.setChecked(true);
-                return true;
-            case R.id.popular_view:
-                item.setChecked(true);
-                return true;
-            case R.id.custom_view:
-                item.setChecked(true);
+            case R.id.action_share:
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                Intent chooser = Intent.createChooser(sendIntent, "Select app");
+                sendIntent.setType("text/plain");
+                if (sendIntent.resolveActivity(getBaseActivity().getPackageManager()) != null)
+                    startActivity(chooser);
                 return true;
 
         }

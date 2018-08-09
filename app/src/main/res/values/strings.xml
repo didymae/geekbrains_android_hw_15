@@ -49,4 +49,11 @@
     <string name="menu_weather">Show weather</string>
     <string name="weather_forecast">Weather forecast</string>
     <string name="ok">ok</string>
+    <string name="action_share">Share</string>
+    <string name="channel_name">sms_channel</string>
+    <string name="channel_description">receive sms for registration</string>
+    <string name="phone_hint">--- --- ----</string>
+    <string name="code">Code</string>
+    <string name="incorrect_code">Code is incorrect. Send code again.</string>
+    <string name="incorrect_phone">Phone number is incorrect.</string>
 </resources>

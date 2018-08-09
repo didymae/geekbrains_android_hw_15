@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.Sensor;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -40,11 +41,13 @@ import com.geekbrains.weather.ui.geoweb.OkHttpRequester;
 import com.geekbrains.weather.ui.plan.PlanFragment;
 import com.geekbrains.weather.ui.temperature.TemperatureFragment;
 import com.geekbrains.weather.ui.weather.WeatherFragment;
+import com.geekbrains.weather.ui.login.LoginFragment;
 
 import es.dmoral.toasty.Toasty;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.geekbrains.weather.Constants.KEYAPI;
+import static com.geekbrains.weather.Constants.SMS_CODE;
 import static com.geekbrains.weather.Constants.TEMP_K;
 
 public class BaseActivity extends AppCompatActivity
@@ -57,10 +60,10 @@ public class BaseActivity extends AppCompatActivity
     String country;
     NavigationView navigationView;
     private static final int PERMISSION_REQUEST_CODE = 10;
+    private static final int PERMISSION_SMS_REQUEST_CODE = 11;
     public final static String BROADCAST_ACTION = "BROADCAST_ACTION";
     public final static String  SENSOR_VAL = "SENSOR_VAL";
     public final static String  SENSOR_TYPE = "SENSOR_TYPE";
-    private BroadcastReceiver broadcastReceiver;
     private TextView textTemp;
     private TextView textHumidity;
     private PrefsHelper prefsHelper;
@@ -69,6 +72,10 @@ public class BaseActivity extends AppCompatActivity
     private TextView textFeelsLike;
     private TextView textVisibility;
     private TextView textPrecipitation;
+
+    private static final String MY_ACTION = "MY_ACTION";
+    private static final String MY_EXTRA = "MY_EXTRA";
+    private String myData = "myData";
 
 
 
@@ -83,34 +90,54 @@ public class BaseActivity extends AppCompatActivity
         initLayout();
 
         //получаем данные о погоде
-        String citySP = prefsHelper.getSharedPreferences(Constants.CITY);
-        if (!citySP.equals("")) {
-            initRetrofitComponent(citySP);}
-            else initRetrofitComponent(DEFAULT_CITY);
+        initRetrofitComponent();
 
-        //запускаем службу
+        //тестовая служба сбор данных с датчиков.
+        startService();
+
+        //broadcast
+        startReceiver();
+
+
+    }
+
+    private void startReceiver() {
+        Intent intent = new Intent(MY_ACTION);
+        intent.putExtra(MY_EXTRA, myData);
+        sendBroadcast(intent);
+
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String testAns = intent.getStringExtra("Test");
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter("com.geekbrains.weather.receiver.SMSReceiver");
+        registerReceiver(broadcastReceiver, intentFilter);
+
+    }
+
+    private void startService(){
+
         Intent intent = new Intent(BaseActivity.this, MyService.class);
         startService(intent);
 
         IntentFilter intentValue = new IntentFilter(BROADCAST_ACTION);
-        broadcastReceiver = new BroadcastReceiver() {
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String value = String.valueOf(intent.getFloatExtra(SENSOR_VAL, 0));
                 int type = intent.getIntExtra(SENSOR_TYPE,0);
                 if( getCurrentFragment() instanceof WeatherFragment){
-           //     setSensorValue(value,type);
-          //      Log.d(SENSOR_VAL, value);
-
+                //     setSensorValue(value,type);
                 }
             }
-
         };
         registerReceiver(broadcastReceiver, intentValue);
 
     }
 
-    private void initRetrofitComponent(String city) {
+    private void initRetrofitComponent() {
         IDataManager dataManager = new DataManager(new DataManager.OnResponseCompleted() {
             @Override
             public void onCompleted(WeatherRequest response) {
@@ -129,14 +156,16 @@ public class BaseActivity extends AppCompatActivity
                     textPressure.setText(Double.toString(response.getMain().getPressure()));
                     textWind.setText(Double.toString(response.getWind().getSpeed()));
                     textVisibility.setText(Double.toString(response.getVisibility()));
-
                 }
-
             }
         });
+        String city;
+        if (!prefsHelper.getSharedPreferences(Constants.CITY).equals("")) {
+            city = prefsHelper.getSharedPreferences(Constants.CITY);
+        } else city = DEFAULT_CITY;
+
         dataManager.initRetrofit();
         dataManager.requestRetrofit(city+",ru", KEYAPI);
-
     }
 
    /* private void setSensorValue(String value, int type) {
@@ -186,11 +215,11 @@ public class BaseActivity extends AppCompatActivity
                 startActionFragment();
             }
         }
-
-        if (getResources().getConfiguration().orientation != ORIENTATION_LANDSCAPE) {
+        if(prefsHelper.getSharedPreferences(Constants.SMS_CODE).equals("")){
+            addMainFragment(new LoginFragment());
+        } else if (getResources().getConfiguration().orientation != ORIENTATION_LANDSCAPE) {
             if (country == null) {
                 addMainFragment(WeatherFragment.newInstance(DEFAULT_CITY));}
-
             else {
                 replaceMainFragment(WeatherFragment.newInstance(country));
             }
@@ -325,6 +354,16 @@ public class BaseActivity extends AppCompatActivity
         }
     }
 
+    public void requestReceiveSMSPermission() {
+
+        if (shouldAskPermission(this,Manifest.permission.RECEIVE_SMS)) {
+// Запрашиваем разрешения у пользователя
+            ActivityCompat.requestPermissions(this, new
+                    String[]{Manifest.permission.RECEIVE_SMS}, PERMISSION_SMS_REQUEST_CODE);
+            Log.d(TEXT, "requestReceiveSMSPermission");
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[]
@@ -345,6 +384,17 @@ public class BaseActivity extends AppCompatActivity
         }
     }
 
-
+    public static boolean shouldAskPermission() {
+        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
+    }
+    private static boolean shouldAskPermission(Context context, String permission){
+        if (shouldAskPermission()) {
+            int permissionResult = ActivityCompat.checkSelfPermission(context, permission);
+            if (permissionResult != PackageManager.PERMISSION_GRANTED) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
